@@ -14,7 +14,7 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
     
     @IBOutlet weak var tableView: UITableView!
     
-    var posts: [PFObject]!
+    var posts: [PFObject] = [ ]
     
     
     
