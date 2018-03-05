@@ -16,15 +16,6 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
     
     var posts: [PFObject]!
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10 //posts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "InstaCell", for: indexPath) as! InstaCell
-        
-        return cell
-    }
     
     
     @IBAction func logout(_ sender: Any)
@@ -47,13 +38,11 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
         query.limit = 20
         
         // fetch data asynchronously
-        query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) -> Void in
+        query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
             if let posts = posts {
-                // do something with the data fetched
                 self.posts = posts
                 self.tableView.reloadData()
             } else {
-                // handle error
                 print(error?.localizedDescription)
             }
         }
@@ -71,9 +60,23 @@ class MainViewController: UIViewController,UITableViewDelegate, UITableViewDataS
         tableView.delegate = self
         tableView.dataSource = self
         
-        //refresh()
+        refresh()
         
     }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "InstaCell", for: indexPath) as! InstaCell
+        
+        let post = self.posts[indexPath.row]
+        cell.instaPost = post
+        
+        return cell
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

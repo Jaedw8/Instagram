@@ -47,12 +47,25 @@ class Post: NSObject {
      */
     class func getPFFileFromImage(image: UIImage?) -> PFFile? {
         // check if image is not nil
-        if let image = image {
+        if var image = image {
+            image = resize(image: image, newSize: CGSize(width: 1000, height: 1000))
             // get image data and check if that is not nil
             if let imageData = UIImagePNGRepresentation(image) {
                 return PFFile(name: "image.png", data: imageData)
             }
         }
         return nil
+    }
+    
+    class func resize(image: UIImage, newSize: CGSize) -> UIImage {
+        let resizeImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height))
+        resizeImageView.contentMode = UIViewContentMode.scaleAspectFill
+        resizeImageView.image = image
+        
+        UIGraphicsBeginImageContext(resizeImageView.frame.size)
+        resizeImageView.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
     }
 }

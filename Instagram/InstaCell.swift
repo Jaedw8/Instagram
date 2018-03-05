@@ -16,6 +16,14 @@ class InstaCell: UITableViewCell {
     
     @IBOutlet weak var caption: UILabel!
     
+    var instaPost: PFObject! {
+        didSet {
+            self.InstaImage.file = instaPost["media"] as? PFFile
+            self.caption.text = instaPost["caption"] as! String
+            InstaImage.loadInBackground()
+        }
+    }
+    
 
     override func awakeFromNib() {
         super.awakeFromNib()
